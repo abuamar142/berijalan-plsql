@@ -105,3 +105,77 @@ begin
       end if;
    end if;
 end;
+
+-- simple case expression
+declare
+   v_job_code        varchar2(10) := 'SA_MAN';
+   v_salary_increase number;
+begin
+   v_salary_increase :=
+      case v_job_code
+         when 'SA_MAN' then
+            1.2
+         when 'SA_REP' then
+            0.3
+         else 0
+      end;
+   dbms_output.put_line('Your salary increase is : ' || v_salary_increase);
+end;
+
+-- searched case expression
+declare
+   v_job_code        varchar2(10) := 'IT_PROG';
+   v_department      varchar2(10) := 'IT';
+   v_salary_increase number;
+begin
+   v_salary_increase :=
+      case
+         when v_job_code = 'SA_MAN' then
+            0.2
+         when
+            v_department = 'IT'
+            and v_job_code = 'IT_PROG'
+         then
+            0.3
+         else 0
+      end;
+   dbms_output.put_line('Your salary increase is : ' || v_salary_increase);
+end;
+declare
+   v_job_code        varchar2(10) := 'IT_PROG';
+   v_department      varchar2(10) := 'IT';
+   v_salary_increase number;
+begin
+   case
+      when v_job_code = 'SA_MAN' then
+         v_salary_increase := 0.2;
+         dbms_output.put_line('The salary increase for a Sales Manager is : ' || v_salary_increase);
+      when
+         v_department = 'IT'
+         and v_job_code = 'IT_PROG'
+      then
+         v_salary_increase := 0.3;
+         dbms_output.put_line('The salary increase for an IT Programmer is : ' || v_salary_increase);
+      else
+         v_salary_increase := 0;
+         dbms_output.put_line('The salary increase for this job code is : ' || v_salary_increase);
+   end case;
+end;
+
+-- decode
+select employee_id,
+       first_name
+       || ' '
+       || last_name,
+       department_id,
+       decode(
+          department_id,
+          10,
+          'Accounting',
+          20,
+          'Sales',
+          30,
+          'IT',
+          'Other'
+       ) as department_name
+  from hr.employees;
